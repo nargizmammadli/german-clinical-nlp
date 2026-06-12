@@ -1,0 +1,43 @@
+{
+  "_generated_by": "Hand-crafted representative example (model not available at generation time)",
+  "_note": "Replace with model-generated output by running: curl -X POST http://localhost:8000/extract -H 'Content-Type: application/json' -d '{\"text\": \"Aufnahme am 03.01.2024. Entlassung am 08.01.2024 nach 5 Tagen station\\u00e4rem Aufenthalt bei Bronchialkarzinom.\"}' > data/examples/temporal_extraction.json",
+  "_input_text": "Aufnahme am 03.01.2024. Entlassung am 08.01.2024 nach 5 Tagen stationärem Aufenthalt bei Bronchialkarzinom.",
+  "temporal_entities": [
+    {
+      "type": "Date",
+      "text": "03.01.2024",
+      "confidence": 0.97,
+      "source_span": {
+        "start": 12,
+        "end": 22,
+        "text": "03.01.2024"
+      },
+      "source_span_validated": true
+    },
+    {
+      "type": "Date",
+      "text": "08.01.2024",
+      "confidence": 0.97,
+      "source_span": {
+        "start": 38,
+        "end": 48,
+        "text": "08.01.2024"
+      },
+      "source_span_validated": true
+    },
+    {
+      "type": "LOS",
+      "text": "5 Tagen",
+      "confidence": 0.91,
+      "source_span": {
+        "start": 54,
+        "end": 61,
+        "text": "5 Tagen"
+      },
+      "source_span_validated": true
+    }
+  ],
+  "clinical_entities": [],
+  "errors": [],
+  "low_confidence": []
+}

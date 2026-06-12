@@ -1,0 +1,43 @@
+{
+  "_generated_by": "Hand-crafted representative example (model not available at generation time)",
+  "_note": "Replace with model-generated output by running: curl -X POST http://localhost:8000/extract -H 'Content-Type: application/json' -d '{\"text\": \"Diagnosen: Diabetes mellitus Typ 2 (E11.9), arterielle Hypertonie (I10), chronische Niereninsuffizienz Stadium 3 (N18.3). Station\\u00e4re Aufnahme zur Einstellung der Blutzuckerwerte.\"}' > data/examples/diagnosis_extraction.json",
+  "_input_text": "Diagnosen: Diabetes mellitus Typ 2 (E11.9), arterielle Hypertonie (I10), chronische Niereninsuffizienz Stadium 3 (N18.3). Stationäre Aufnahme zur Einstellung der Blutzuckerwerte.",
+  "temporal_entities": [],
+  "clinical_entities": [
+    {
+      "type": "Diagnosis",
+      "text": "Diabetes mellitus Typ 2",
+      "confidence": 0.95,
+      "source_span": {
+        "start": 11,
+        "end": 34,
+        "text": "Diabetes mellitus Typ 2"
+      },
+      "source_span_validated": true
+    },
+    {
+      "type": "Diagnosis",
+      "text": "arterielle Hypertonie",
+      "confidence": 0.94,
+      "source_span": {
+        "start": 44,
+        "end": 65,
+        "text": "arterielle Hypertonie"
+      },
+      "source_span_validated": true
+    },
+    {
+      "type": "Diagnosis",
+      "text": "chronische Niereninsuffizienz Stadium 3",
+      "confidence": 0.89,
+      "source_span": {
+        "start": 73,
+        "end": 112,
+        "text": "chronische Niereninsuffizienz Stadium 3"
+      },
+      "source_span_validated": true
+    }
+  ],
+  "errors": [],
+  "low_confidence": []
+}

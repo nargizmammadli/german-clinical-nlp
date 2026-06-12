@@ -1,0 +1,66 @@
+{
+  "_generated_by": "Hand-crafted representative example (model not available at generation time)",
+  "_note": "Replace with model-generated output by running: curl -X POST http://localhost:8000/extract -H 'Content-Type: application/json' -d '{\"text\": \"Medikation bei Entlassung: Metformin 1000mg t\\u00e4glich, Ramipril 5mg t\\u00e4glich. Verweildauer: 7 Tage. Station\\u00e4rer Aufenthalt vom 10.02.2024 bis 17.02.2024.\"}' > data/examples/medication_los_extraction.json",
+  "_input_text": "Medikation bei Entlassung: Metformin 1000mg täglich, Ramipril 5mg täglich. Verweildauer: 7 Tage. Stationärer Aufenthalt vom 10.02.2024 bis 17.02.2024.",
+  "temporal_entities": [
+    {
+      "type": "LOS",
+      "text": "7 Tage",
+      "confidence": 0.93,
+      "source_span": {
+        "start": 89,
+        "end": 95,
+        "text": "7 Tage"
+      },
+      "source_span_validated": true
+    },
+    {
+      "type": "Date",
+      "text": "10.02.2024",
+      "confidence": 0.97,
+      "source_span": {
+        "start": 124,
+        "end": 134,
+        "text": "10.02.2024"
+      },
+      "source_span_validated": true
+    },
+    {
+      "type": "Date",
+      "text": "17.02.2024",
+      "confidence": 0.97,
+      "source_span": {
+        "start": 139,
+        "end": 149,
+        "text": "17.02.2024"
+      },
+      "source_span_validated": true
+    }
+  ],
+  "clinical_entities": [
+    {
+      "type": "Medication",
+      "text": "Metformin 1000mg",
+      "confidence": 0.96,
+      "source_span": {
+        "start": 27,
+        "end": 43,
+        "text": "Metformin 1000mg"
+      },
+      "source_span_validated": true
+    },
+    {
+      "type": "Medication",
+      "text": "Ramipril 5mg",
+      "confidence": 0.94,
+      "source_span": {
+        "start": 53,
+        "end": 65,
+        "text": "Ramipril 5mg"
+      },
+      "source_span_validated": true
+    }
+  ],
+  "errors": [],
+  "low_confidence": []
+}
