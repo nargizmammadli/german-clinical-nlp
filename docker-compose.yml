@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  api:
+    build: .
+    container_name: german-clinical-nlp
+    ports:
+      - "8000:8000"
+    volumes:
+      # Model volume: host ./models maps to /app/models inside container (read-only).
+      # :ro prevents container from modifying the model file on the host (T-03-03).
+      - ./models:/app/models:ro
+    env_file:
+      - .env
+    environment:
+      # MODEL_PATH is relative to container WORKDIR /app.
+      # With volume mount ./models:/app/models, this resolves to /app/models/mistral-7b-instruct.gguf.
+      # Value must match the filename of the GGUF file you downloaded to ./models/ on the host.
+      - MODEL_PATH=models/mistral-7b-instruct.gguf
+      - MODEL_NAME=Mistral 7B Instruct Q4_K_M
+      - LOG_LEVEL=INFO
+      - CONFIDENCE_THRESHOLD=0.5
+    # Hard memory limit (T-03-05): prevents host memory exhaustion if model load grows unbounded.
+    # Comfortable headroom for Mistral 7B (~4.5GB model + ~2GB working memory).
+    mem_limit: 8g
+    mem_reservation: 6g
+    restart: unless-stopped
+    healthcheck:
+      # CMD form references healthcheck.py copied into the container image.
+      # start_period covers the 20-30s Mistral 7B model load time with safe headroom.
+      test: ["CMD", "python", "healthcheck.py"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
