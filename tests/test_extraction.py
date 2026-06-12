@@ -243,3 +243,77 @@ def test_extract_clinical_entities_medication():
     assert "start" in span
     assert "end" in span
     assert "text" in span
+
+
+def test_extract_all_entity_types():
+    """
+    Test parallel extraction of all entity types from German clinical text (TDD RED).
+
+    Verifies that both temporal and clinical extractors run and return results.
+    Per D-12: Extractors should run in parallel (asyncio.gather).
+    """
+    from src.main import app
+
+    # Mock app state with loaded model
+    mock_model = MagicMock()
+
+    # Mock model to return different responses based on which extractor calls it
+    # First call (temporal): returns date and LOS
+    # Second call (clinical): returns diagnosis and medication
+    mock_model.create_chat_completion.side_effect = [
+        {
+            "choices": [{
+                "message": {
+                    "content": '{"temporal_entities": [{"type": "Date", "text": "15.03.2025", "confidence": 0.95, "source_span": {"start": 11, "end": 21, "text": "15.03.2025"}}, {"type": "LOS", "text": "4 Tage", "confidence": 0.90, "source_span": {"start": 184, "end": 190, "text": "4 Tage"}}]}'
+                }
+            }]
+        },
+        {
+            "choices": [{
+                "message": {
+                    "content": '{"clinical_entities": [{"type": "Diagnosis", "text": "Lumbalgie (M54.5)", "confidence": 0.92, "source_span": {"start": 92, "end": 109, "text": "Lumbalgie (M54.5)"}}, {"type": "Medication", "text": "Ibuprofen 600mg", "confidence": 0.95, "source_span": {"start": 121, "end": 136, "text": "Ibuprofen 600mg"}}]}'
+                }
+            }]
+        }
+    ]
+    app.state.model = mock_model
+
+    client = TestClient(app)
+    response = client.post(
+        "/extract",
+        json={"text": "Aufnahme am 15.03.2025. Patient klagt über chronische Rückenschmerzen seit 6 Monaten. Diagnose: Lumbalgie (M54.5). Therapie: Ibuprofen 600mg 3x täglich. Verweildauer: 4 Tage."}
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+
+    # Verify all entity type arrays present
+    assert "temporal_entities" in data
+    assert "clinical_entities" in data
+    assert "errors" in data
+
+    # Verify temporal entities (dates + LOS)
+    assert isinstance(data["temporal_entities"], list)
+    assert len(data["temporal_entities"]) >= 2, "Should have at least 2 temporal entities (date + LOS)"
+
+    # Check for at least one Date and one LOS entity
+    temporal_types = [e["type"] for e in data["temporal_entities"]]
+    assert "Date" in temporal_types, "Should have at least one Date entity"
+    assert "LOS" in temporal_types, "Should have at least one LOS entity"
+
+    # Verify clinical entities (diagnoses + medications)
+    assert isinstance(data["clinical_entities"], list)
+    assert len(data["clinical_entities"]) >= 2, "Should have at least 2 clinical entities (diagnosis + medication)"
+
+    # Check for at least one Diagnosis and one Medication entity
+    clinical_types = [e["type"] for e in data["clinical_entities"]]
+    assert "Diagnosis" in clinical_types, "Should have at least one Diagnosis entity"
+    assert "Medication" in clinical_types, "Should have at least one Medication entity"
+
+    # Verify each entity has required fields
+    for entity in data["temporal_entities"] + data["clinical_entities"]:
+        assert "type" in entity
+        assert "text" in entity
+        assert "confidence" in entity
+        assert "source_span" in entity
+        assert 0.0 <= entity["confidence"] <= 1.0
