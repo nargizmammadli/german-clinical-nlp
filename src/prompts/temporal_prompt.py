@@ -42,8 +42,8 @@ Output:
       "text": "15.03.2025",
       "confidence": 0.95,
       "source_span": {
-        "start": 11,
-        "end": 21,
+        "start": 12,
+        "end": 22,
         "text": "15.03.2025"
       }
     }
@@ -70,8 +70,8 @@ Output:
       "text": "18.01.2025",
       "confidence": 0.95,
       "source_span": {
-        "start": 59,
-        "end": 69,
+        "start": 58,
+        "end": 68,
         "text": "18.01.2025"
       }
     },
@@ -80,8 +80,8 @@ Output:
       "text": "4 Tage",
       "confidence": 0.90,
       "source_span": {
-        "start": 127,
-        "end": 133,
+        "start": 122,
+        "end": 128,
         "text": "4 Tage"
       }
     }
@@ -108,8 +108,8 @@ Output:
       "text": "5 Tagen",
       "confidence": 0.85,
       "source_span": {
-        "start": 95,
-        "end": 102,
+        "start": 94,
+        "end": 101,
         "text": "5 Tagen"
       }
     }
