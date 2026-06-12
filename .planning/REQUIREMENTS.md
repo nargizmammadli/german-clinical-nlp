@@ -34,7 +34,7 @@ Requirements for initial portfolio-ready release. Each maps to roadmap phases.
 ### Validation
 
 - [x] **VAL-01**: Pydantic schema validation enforces entity structure
-- [ ] **VAL-02**: Domain validators reject impossible values (future dates, invalid formats)
+- [x] **VAL-02**: Domain validators reject impossible values (future dates, invalid formats)
 - [x] **VAL-03**: Confidence scores included for each extracted entity
 
 ### Data & Samples
@@ -125,7 +125,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | API-04 | Phase 2 | Complete |
 | API-05 | Phase 1 | Complete |
 | VAL-01 | Phase 2 | Complete |
-| VAL-02 | Phase 2 | Pending |
+| VAL-02 | Phase 2 | Complete |
 | VAL-03 | Phase 2 | Complete |
 | DATA-01 | Phase 1 | Complete |
 | DATA-02 | Phase 1 | Complete |

@@ -2,35 +2,35 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-last_updated: "2026-06-12T08:27:00Z"
+status: completed
+last_updated: "2026-06-12T11:54:19.696Z"
 progress:
   total_phases: 3
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 4
-  completed_plans: 3
-  percent: 75
+  completed_plans: 4
+  percent: 67
 ---
 
 # Project State: German Clinical NLP Pipeline
 
 **Last Updated:** 2026-06-12  
-**Status:** Executing Phase 02
+**Status:** Phase 02 Complete — Ready for Phase 03
 
 ## Project Reference
 
 **Core Value:** Demonstrates production-ready clinical NLP with local LLM deployment, structured output validation, and explicit hallucination handling — all with German medical text.
 
-**Current Focus:** Phase 02 — entity-extraction-pipeline
+**Current Focus:** Phase 03 — deployment-and-documentation
 
 ## Current Position
 
-Phase: 02 (entity-extraction-pipeline) — EXECUTING
-Plan: 3 of 3
-**Phase:** 2
-**Plan:** 3
-**Status:** Ready to execute  
-**Progress:** `[███████████████░░░░░] 75%` (1/3 phases complete, 3/4 plans complete)
+Phase: 02 (entity-extraction-pipeline) — COMPLETE
+Plan: 3 of 3 (all plans complete)
+**Phase:** 3
+**Plan:** 1
+**Status:** Ready to execute Phase 03  
+**Progress:** `[█████████████████░░░] 67%` (2/3 phases complete, 4/4 plans of phase 2 complete)
 
 **Phase Goal:** Working local LLM deployment with health monitoring and German clinical sample data
 
@@ -52,10 +52,16 @@ Plan: 3 of 3
 | Blockers | 0 | - |
 | Duration (02-01) | 439s | 7 minutes |
 | Duration (02-02) | 418s | 7 minutes |
+| Duration (02-03) | 336s | 6 minutes |
 
 ## Accumulated Context
 
 ### Decisions Made
+
+**2026-06-12 - Phase 02 Plan 03 (Validation and Confidence Filtering)**
+
+- D-20: Confidence filtering delegated to endpoint level (not extractors) to respect configurable CONFIDENCE_THRESHOLD env var
+- D-21: validate_date_not_future returns (bool, str|None) tuple for clean caller integration
 
 **2026-06-12 - Phase 02 Plan 02 (Clinical Entity Extraction + Parallel Execution)**
 
@@ -86,7 +92,7 @@ None yet.
 
 - [x] Execute Phase 02 Plan 01 (temporal entity extraction) - completed 2026-06-12
 - [x] Execute Phase 02 Plan 02 (clinical entity extraction + parallel execution) - completed 2026-06-12
-- [ ] Execute Phase 02 Plan 03 (if exists) - next
+- [x] Execute Phase 02 Plan 03 (validation and confidence filtering) - completed 2026-06-12
 
 ### Blockers
 
@@ -106,12 +112,13 @@ Research completed 2026-06-11:
 
 **For next session:**
 
-- Phase 02 Plan 02 complete: Clinical entity extraction + parallel execution working
-- All four entity types (dates, LOS, diagnoses, medications) extracting in parallel via asyncio.gather
-- Plugin pattern documented in docs/ARCHITECTURE.md for extensibility
-- Summaries: 
+- Phase 02 complete: All 3 plans executed
+- Validation layer added: future dates rejected, confidence threshold filtering via CONFIDENCE_THRESHOLD env var
+- All 24 tests pass including 9 new validation tests and 2 new integration tests
+- Summaries:
   - `.planning/phases/02-entity-extraction-pipeline/02-01-SUMMARY.md`
   - `.planning/phases/02-entity-extraction-pipeline/02-02-SUMMARY.md`
+  - `.planning/phases/02-entity-extraction-pipeline/02-03-SUMMARY.md`
 
 **Quick context:**
 This is a portfolio project demonstrating German clinical NLP with local LLM deployment. We're building an information extraction pipeline (dates, diagnoses, medications, length-of-stay) using llama-cpp-python with GGUF models and FastAPI, validated with Pydantic schemas. Target audience: healthcare AI recruiters reviewing GitHub portfolio.

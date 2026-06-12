@@ -9,7 +9,7 @@
 ## Phases
 
 - [x] **Phase 1: Foundation & Core Infrastructure** - Establish model deployment, API scaffold, and sample data (completed 2026-06-12)
-- [ ] **Phase 2: Entity Extraction Pipeline** - Build complete extraction with all entity types and validation
+- [x] **Phase 2: Entity Extraction Pipeline** - Build complete extraction with all entity types and validation (completed 2026-06-12)
 - [ ] **Phase 3: Deployment & Documentation** - Package as portfolio-ready Docker demo
 
 ## Phase Details
@@ -51,7 +51,7 @@
 Plans:
 - [x] 02-01-PLAN.md — Temporal entity extraction with plugin pattern foundation (completed 2026-06-12)
 - [x] 02-02-PLAN.md — Clinical entity extraction with parallel execution (completed 2026-06-12)
-- [ ] 02-03-PLAN.md — Validation logic and confidence filtering
+- [x] 02-03-PLAN.md — Validation logic and confidence filtering (completed 2026-06-12)
 ---
 
 ### Phase 3: Deployment & Documentation
@@ -77,7 +77,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Core Infrastructure | 1/1 | Complete    | 2026-06-12 |
-| 2. Entity Extraction Pipeline | 2/3 | Executing | - |
+| 2. Entity Extraction Pipeline | 3/3 | Complete | 2026-06-12 |
 | 3. Deployment & Documentation | 0/0 | Not started | - |
 
 ---
