@@ -1,8 +1,8 @@
 # Environment files
 .env
 
-# Model files (too large for git)
-models/
+# Model files (too large for git) - must be at root level
+/models/
 
 # Python
 __pycache__/
