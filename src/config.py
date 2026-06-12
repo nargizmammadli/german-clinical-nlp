@@ -29,6 +29,22 @@ MODEL_PATH_RAW = os.getenv("MODEL_PATH")
 MODEL_NAME = os.getenv("MODEL_NAME", "unknown")
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 
+# Confidence threshold for entity filtering per D-06
+# Entities below this threshold are moved to the low_confidence array in responses.
+CONFIDENCE_THRESHOLD_RAW = os.getenv("CONFIDENCE_THRESHOLD", "0.5")
+try:
+    CONFIDENCE_THRESHOLD = float(CONFIDENCE_THRESHOLD_RAW)
+except ValueError:
+    raise ValueError(
+        f"CONFIDENCE_THRESHOLD must be a number between 0.0 and 1.0, "
+        f"got: '{CONFIDENCE_THRESHOLD_RAW}'"
+    )
+if not 0.0 <= CONFIDENCE_THRESHOLD <= 1.0:
+    raise ValueError(
+        f"CONFIDENCE_THRESHOLD must be between 0.0 and 1.0, "
+        f"got {CONFIDENCE_THRESHOLD}"
+    )
+
 # Resolve MODEL_PATH relative to project root (per D-08)
 MODEL_PATH = PROJECT_ROOT / MODEL_PATH_RAW
 
