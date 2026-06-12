@@ -71,11 +71,17 @@ Plans:
   5. Portfolio reviewer can test all extraction endpoints and verify output quality against documented examples
 
 **Plans:** 3 plans
-
 Plans:
+**Wave 1**
 
 - [ ] 03-01-PLAN.md — Docker infrastructure: Dockerfile, docker-compose.yml, healthcheck.py, .dockerignore, .env.example, loguru runtime dep
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 03-02-PLAN.md — Documentation: full README.md rewrite + docs/ARCHITECTURE.md component diagram supplement
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
 - [ ] 03-03-PLAN.md — Example extraction output: 3 pre-generated JSON files in data/examples/
 
 ---
