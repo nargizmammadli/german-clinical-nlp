@@ -10,10 +10,18 @@ Per D-16: LLM provides character-offset source spans.
 """
 
 import json
+import re
 from src.extraction.base import BaseExtractor, register_extractor
 from src.prompts.temporal_prompt import TEMPORAL_EXTRACTION_PROMPT
 from src.schemas.entities import TemporalEntity, SourceSpan
 from pydantic import ValidationError
+
+
+def _extract_json(text: str) -> str:
+    """Strip markdown code fences and extract the first JSON object from LLM output."""
+    text = re.sub(r"```(?:json)?", "", text).strip()
+    match = re.search(r"\{.*\}", text, re.DOTALL)
+    return match.group(0) if match else text
 
 
 @register_extractor("temporal")
@@ -57,24 +65,19 @@ class TemporalExtractor(BaseExtractor):
             response = self.model.create_chat_completion(
                 messages=[
                     {
-                        "role": "system",
-                        "content": TEMPORAL_EXTRACTION_PROMPT
-                    },
-                    {
                         "role": "user",
-                        "content": text
+                        "content": f"{TEMPORAL_EXTRACTION_PROMPT}\n\nInput text:\n{text}"
                     }
                 ],
-                response_format={
-                    "type": "json_object"
-                },
                 temperature=0.1,  # Low temperature for consistent extraction
-                max_tokens=2048
+                max_tokens=512
             )
 
             # Extract JSON from response
             content = response["choices"][0]["message"]["content"]
-            llm_output = json.loads(content)
+            from loguru import logger
+            logger.debug(f"LLM raw output (temporal): {repr(content)}")
+            llm_output = json.loads(_extract_json(content))
 
             # Process temporal entities with source span validation
             if "temporal_entities" in llm_output:

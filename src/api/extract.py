@@ -92,28 +92,17 @@ async def extract_entities(request_body: ExtractionRequest, request: Request):
         else:
             combined_result["errors"].append("Clinical extractor not registered")
 
-        # Run extractors in parallel per D-12 using asyncio.gather
-        # Use asyncio.to_thread since llama-cpp-python is synchronous
+        # Run extractors sequentially — llama-cpp-python is not thread-safe;
+        # concurrent calls on the same model instance cause heap corruption.
         if extractors:
-            tasks = [
-                asyncio.to_thread(extractor.extract, request_body.text)
-                for name, extractor in extractors
-            ]
-
-            # Per D-12: Run both extractors concurrently
-            results = await asyncio.gather(*tasks, return_exceptions=True)
-
-            # Merge results per D-05: preserve partial results even if one extractor fails
-            for i, result in enumerate(results):
-                if isinstance(result, Exception):
-                    # Per D-05, D-08: Capture error but continue processing
-                    extractor_name = extractors[i][0]
-                    combined_result["errors"].append(f"{extractor_name} extraction failed: {str(result)}")
-                elif isinstance(result, dict):
-                    # Merge successful results
+            for name, extractor in extractors:
+                try:
+                    result = await asyncio.to_thread(extractor.extract, request_body.text)
                     combined_result["temporal_entities"].extend(result.get("temporal_entities", []))
                     combined_result["clinical_entities"].extend(result.get("clinical_entities", []))
                     combined_result["errors"].extend(result.get("errors", []))
+                except Exception as e:
+                    combined_result["errors"].append(f"{name} extraction failed: {str(e)}")
                     # Note: low_confidence from extractors is ignored — filtering done at endpoint level
 
         # --- Domain Validation (per VAL-02, D-07, D-08) ---

@@ -10,10 +10,18 @@ Per D-16: LLM provides character-offset source spans.
 """
 
 import json
+import re
 from src.extraction.base import BaseExtractor, register_extractor
 from src.prompts.clinical_prompt import CLINICAL_EXTRACTION_PROMPT
 from src.schemas.entities import ClinicalEntity, SourceSpan
 from pydantic import ValidationError
+
+
+def _extract_json(text: str) -> str:
+    """Strip markdown code fences and extract the first JSON object from LLM output."""
+    text = re.sub(r"```(?:json)?", "", text).strip()
+    match = re.search(r"\{.*\}", text, re.DOTALL)
+    return match.group(0) if match else text
 
 
 @register_extractor("clinical")
@@ -57,24 +65,17 @@ class ClinicalExtractor(BaseExtractor):
             response = self.model.create_chat_completion(
                 messages=[
                     {
-                        "role": "system",
-                        "content": CLINICAL_EXTRACTION_PROMPT
-                    },
-                    {
                         "role": "user",
-                        "content": text
+                        "content": f"{CLINICAL_EXTRACTION_PROMPT}\n\nInput text:\n{text}"
                     }
                 ],
-                response_format={
-                    "type": "json_object"
-                },
                 temperature=0.1,  # Low temperature for consistent extraction
-                max_tokens=2048
+                max_tokens=512
             )
 
             # Extract JSON from response
             content = response["choices"][0]["message"]["content"]
-            llm_output = json.loads(content)
+            llm_output = json.loads(_extract_json(content))
 
             # Process clinical entities with source span validation
             if "clinical_entities" in llm_output:

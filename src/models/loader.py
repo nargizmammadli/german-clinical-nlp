@@ -47,7 +47,7 @@ def initialize_model(model_path: Path, n_ctx: int = 8192) -> Optional[object]:
         # Initialize Llama model with optimized settings
         model = Llama(
             model_path=str(model_path),
-            n_ctx=n_ctx,           # Context window (MODEL-04: 8K+ context)
+            n_ctx=4096,            # Enough for prompt + response
             n_threads=4,           # CPU optimization
             verbose=True           # Show loading progress (RESEARCH.md pitfall 3)
         )
