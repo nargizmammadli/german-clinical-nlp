@@ -86,12 +86,16 @@ class TemporalExtractor(BaseExtractor):
                         end = source_span_data.get("end", 0)
                         span_text = source_span_data.get("text", "")
 
-                        # Validate span matches input text
+                        # Validate span matches input text; reject out-of-bounds entirely
                         if 0 <= start < end <= len(text):
                             actual_text = text[start:end]
                             source_span_validated = (actual_text == span_text)
                         else:
-                            source_span_validated = False
+                            result["errors"].append(
+                                f"Entity '{entity_data.get('text', '?')}' has out-of-bounds span"
+                                f" [{start}:{end}] for text length {len(text)}"
+                            )
+                            continue
 
                         # Create SourceSpan
                         source_span = SourceSpan(
