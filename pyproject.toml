@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "german-clinical-nlp"
+version = "1.0.0"
+description = "Portfolio-focused information extraction pipeline for German clinical text"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+license = {text = "MIT"}
+authors = [
+    {name = "Nargiz Mammadli", email = "mnergiz298@gmail.com"}
+]
+
+dependencies = [
+    "llama-cpp-python==0.3.28",
+    "fastapi==0.136.3",
+    "pydantic==2.13.4",
+    "uvicorn[standard]>=0.34.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "datasets>=3.4.0",
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+    "httpx>=0.28.0",
+]
+
+[tool.setuptools]
+packages = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
