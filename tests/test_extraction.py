@@ -128,7 +128,7 @@ def test_extract_response_schema():
     mock_model.create_chat_completion.return_value = {
         "choices": [{
             "message": {
-                "content": '{"temporal_entities": [{"type": "Date", "text": "15.03.2025", "confidence": 0.95, "source_span": {"start": 11, "end": 21, "text": "15.03.2025"}, "source_span_validated": true}]}'
+                "content": '{"temporal_entities": [{"type": "Date", "text": "15.03.2025", "confidence": 0.95, "source_span": {"start": 12, "end": 22, "text": "15.03.2025"}, "source_span_validated": true}]}'
             }
         }]
     }
@@ -152,6 +152,13 @@ def test_extract_response_schema():
     assert isinstance(data["temporal_entities"], list)
     assert isinstance(data["clinical_entities"], list)
     assert isinstance(data["errors"], list)
+
+    # Verify span validation flag so regressions in span grounding are caught
+    if data["temporal_entities"]:
+        entity = data["temporal_entities"][0]
+        assert entity.get("source_span_validated") is True, (
+            "source_span_validated should be True when offsets correctly point to entity text"
+        )
 
 
 def test_extract_clinical_entities_diagnosis():
