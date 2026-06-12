@@ -7,6 +7,7 @@ Exposes health, model metadata, and entity extraction endpoints.
 
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from loguru import logger
 from src import config
 from src.models.loader import initialize_model
 from src.api import health, models, extract
@@ -32,10 +33,10 @@ async def lifespan(app: FastAPI):
         # llama-cpp-python not installed (test/dev environment)
         # Tests will mock app.state.model directly
         app.state.model = None
-        print("Warning: llama-cpp-python not installed, model not loaded")
+        logger.warning("llama-cpp-python not installed, model not loaded")
     except Exception as e:
         # Model loading failed (per D-06: fail fast)
-        print(f"ERROR: Failed to load model: {e}")
+        logger.error(f"Failed to load model: {e}")
         app.state.model = None
         # Continue startup but mark model as unavailable
         # Health endpoint will return 503
