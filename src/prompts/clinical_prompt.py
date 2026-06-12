@@ -57,8 +57,8 @@ Output:
       "text": "Ibuprofen 600mg",
       "confidence": 0.95,
       "source_span": {
-        "start": 38,
-        "end": 53,
+        "start": 39,
+        "end": 54,
         "text": "Ibuprofen 600mg"
       }
     }
@@ -76,7 +76,7 @@ Output:
       "confidence": 0.95,
       "source_span": {
         "start": 10,
-        "end": 42,
+        "end": 41,
         "text": "Diabetes mellitus Typ 2 (E11.9)"
       }
     },
@@ -85,8 +85,8 @@ Output:
       "text": "arterielle Hypertonie (I10)",
       "confidence": 0.95,
       "source_span": {
-        "start": 44,
-        "end": 72,
+        "start": 43,
+        "end": 70,
         "text": "arterielle Hypertonie (I10)"
       }
     },
@@ -95,8 +95,8 @@ Output:
       "text": "Metformin 1000mg",
       "confidence": 0.95,
       "source_span": {
-        "start": 86,
-        "end": 102,
+        "start": 84,
+        "end": 100,
         "text": "Metformin 1000mg"
       }
     },
@@ -105,8 +105,8 @@ Output:
       "text": "Ramipril 5mg",
       "confidence": 0.95,
       "source_span": {
-        "start": 116,
-        "end": 128,
+        "start": 113,
+        "end": 125,
         "text": "Ramipril 5mg"
       }
     }
@@ -123,8 +123,8 @@ Output:
       "text": "akuter Exazerbation einer COPD (J44.1)",
       "confidence": 0.92,
       "source_span": {
-        "start": 27,
-        "end": 66,
+        "start": 26,
+        "end": 64,
         "text": "akuter Exazerbation einer COPD (J44.1)"
       }
     },
@@ -133,8 +133,8 @@ Output:
       "text": "Amoxicillin 1g",
       "confidence": 0.95,
       "source_span": {
-        "start": 92,
-        "end": 106,
+        "start": 90,
+        "end": 104,
         "text": "Amoxicillin 1g"
       }
     }
