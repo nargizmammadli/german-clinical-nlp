@@ -152,3 +152,94 @@ def test_extract_response_schema():
     assert isinstance(data["temporal_entities"], list)
     assert isinstance(data["clinical_entities"], list)
     assert isinstance(data["errors"], list)
+
+
+def test_extract_clinical_entities_diagnosis():
+    """Test extraction of diagnosis entities from German clinical text (TDD RED)."""
+    from src.main import app
+
+    # Mock app state with loaded model
+    mock_model = MagicMock()
+    # Mock model response with diagnosis entity
+    mock_model.create_chat_completion.return_value = {
+        "choices": [{
+            "message": {
+                "content": '{"clinical_entities": [{"type": "Diagnosis", "text": "Lumbalgie (M54.5)", "confidence": 0.92, "source_span": {"start": 10, "end": 27, "text": "Lumbalgie (M54.5)"}, "source_span_validated": true}]}'
+            }
+        }]
+    }
+    app.state.model = mock_model
+
+    client = TestClient(app)
+    response = client.post(
+        "/extract",
+        json={"text": "Diagnose: Lumbalgie (M54.5). Therapie empfohlen."}
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+
+    # Validate response has clinical_entities
+    assert "clinical_entities" in data
+    assert isinstance(data["clinical_entities"], list)
+    assert len(data["clinical_entities"]) > 0
+
+    # Validate diagnosis entity
+    entity = data["clinical_entities"][0]
+    assert entity["type"] == "Diagnosis"
+    assert "Lumbalgie" in entity["text"]
+    assert "confidence" in entity
+    assert 0.0 <= entity["confidence"] <= 1.0
+
+    # Validate source span
+    assert "source_span" in entity
+    span = entity["source_span"]
+    assert "start" in span
+    assert "end" in span
+    assert "text" in span
+
+
+def test_extract_clinical_entities_medication():
+    """Test extraction of medication entities from German clinical text (TDD RED)."""
+    from src.main import app
+
+    # Mock app state with loaded model
+    mock_model = MagicMock()
+    # Mock model response with medication entity
+    mock_model.create_chat_completion.return_value = {
+        "choices": [{
+            "message": {
+                "content": '{"clinical_entities": [{"type": "Medication", "text": "Ibuprofen 600mg", "confidence": 0.95, "source_span": {"start": 9, "end": 24, "text": "Ibuprofen 600mg"}, "source_span_validated": true}]}'
+            }
+        }]
+    }
+    app.state.model = mock_model
+
+    client = TestClient(app)
+    response = client.post(
+        "/extract",
+        json={"text": "Therapie: Ibuprofen 600mg 3x täglich."}
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+
+    # Validate response has clinical_entities
+    assert "clinical_entities" in data
+    assert isinstance(data["clinical_entities"], list)
+    assert len(data["clinical_entities"]) > 0
+
+    # Validate medication entity
+    entity = data["clinical_entities"][0]
+    assert entity["type"] == "Medication"
+    assert "Ibuprofen" in entity["text"]
+    assert "600mg" in entity["text"]
+    assert "confidence" in entity
+    assert 0.0 <= entity["confidence"] <= 1.0
+
+    # Validate source span
+    assert "source_span" in entity
+    span = entity["source_span"]
+    assert "start" in span
+    assert "end" in span
+    assert "text" in span
