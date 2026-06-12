@@ -1,0 +1,1 @@
+"""Prompts for entity extraction."""
