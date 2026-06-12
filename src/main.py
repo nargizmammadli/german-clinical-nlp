@@ -9,7 +9,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from src import config
 from src.models.loader import initialize_model
-from src.api import health, models
+from src.api import health, models, extract
 
 
 @asynccontextmanager
@@ -57,3 +57,4 @@ app = FastAPI(
 # Include routers
 app.include_router(health.router, tags=["health"])
 app.include_router(models.router, tags=["models"])
+app.include_router(extract.router, tags=["extraction"])

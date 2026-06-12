@@ -18,11 +18,11 @@ def test_extract_temporal_entities_dates():
 
     # Mock app state with loaded model
     mock_model = MagicMock()
-    # Mock model response with temporal entity
+    # Mock model response with temporal entity (correct offsets for "Aufnahme am 15.03.2025...")
     mock_model.create_chat_completion.return_value = {
         "choices": [{
             "message": {
-                "content": '{"temporal_entities": [{"type": "Date", "text": "15.03.2025", "confidence": 0.95, "source_span": {"start": 11, "end": 21, "text": "15.03.2025"}, "source_span_validated": true}]}'
+                "content": '{"temporal_entities": [{"type": "Date", "text": "15.03.2025", "confidence": 0.95, "source_span": {"start": 12, "end": 22, "text": "15.03.2025"}, "source_span_validated": true}]}'
             }
         }]
     }
@@ -31,7 +31,7 @@ def test_extract_temporal_entities_dates():
     client = TestClient(app)
     response = client.post(
         "/extract",
-        json={"text": "Aufnahme am 15.03.2025. Patient klagt über chronische Rückenschmerzen."}
+        json={"text": "Aufnahme am 15.03.2025. Patient wurde untersucht."}
     )
 
     assert response.status_code == 200
@@ -52,12 +52,12 @@ def test_extract_temporal_entities_dates():
     # Validate source span
     assert "source_span" in entity
     span = entity["source_span"]
-    assert span["start"] == 11
-    assert span["end"] == 21
+    assert span["start"] == 12
+    assert span["end"] == 22
     assert span["text"] == "15.03.2025"
 
     # Verify source span matches input text slice
-    input_text = "Aufnahme am 15.03.2025. Patient klagt über chronische Rückenschmerzen."
+    input_text = "Aufnahme am 15.03.2025. Patient wurde untersucht."
     assert input_text[span["start"]:span["end"]] == span["text"]
 
 
