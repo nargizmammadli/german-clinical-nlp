@@ -45,10 +45,10 @@ Requirements for initial portfolio-ready release. Each maps to roadmap phases.
 
 ### Deployment
 
-- [ ] **DEPLOY-01**: Dockerfile enables local development deployment
-- [ ] **DEPLOY-02**: docker-compose.yml provides one-command working demo
-- [ ] **DEPLOY-03**: Docker configuration includes explicit memory limits
-- [ ] **DEPLOY-04**: Container includes health checks
+- [x] **DEPLOY-01**: Dockerfile enables local development deployment
+- [x] **DEPLOY-02**: docker-compose.yml provides one-command working demo
+- [x] **DEPLOY-03**: Docker configuration includes explicit memory limits
+- [x] **DEPLOY-04**: Container includes health checks
 
 ### Documentation
 

@@ -74,7 +74,7 @@ Plans:
 Plans:
 **Wave 1**
 
-- [ ] 03-01-PLAN.md — Docker infrastructure: Dockerfile, docker-compose.yml, healthcheck.py, .dockerignore, .env.example, loguru runtime dep
+- [x] 03-01-PLAN.md — Docker infrastructure: Dockerfile, docker-compose.yml, healthcheck.py, .dockerignore, .env.example, loguru runtime dep (completed 2026-06-12)
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -92,7 +92,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Foundation & Core Infrastructure | 1/1 | Complete    | 2026-06-12 |
 | 2. Entity Extraction Pipeline | 3/3 | Complete   | 2026-06-12 |
-| 3. Deployment & Documentation | 0/3 | Not started | - |
+| 3. Deployment & Documentation | 1/3 | In progress | - |
 
 ---
-*Last updated: 2026-06-12*
+*Last updated: 2026-06-12 (03-01 complete)*
