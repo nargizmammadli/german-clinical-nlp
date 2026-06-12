@@ -1,9 +1,9 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.0
-milestone_name: milestone
-status: complete
-last_updated: "2026-06-12T17:00:00.000Z"
+milestone_name: MVP
+status: milestone_archived
+last_updated: "2026-06-12T20:00:00.000Z"
 progress:
   total_phases: 3
   completed_phases: 3
@@ -14,14 +14,15 @@ progress:
 
 # Project State: German Clinical NLP Pipeline
 
-**Last Updated:** 2026-06-12  
-**Status:** Complete — all phases and plans executed
+**Last Updated:** 2026-06-12 (v1.0 milestone archived)
+**Status:** v1.0 MVP archived — ready for next milestone
 
 ## Project Reference
 
-**Core Value:** Demonstrates production-ready clinical NLP with local LLM deployment, structured output validation, and explicit hallucination handling — all with German medical text.
+See: .planning/PROJECT.md (updated 2026-06-12)
 
-**Current Focus:** Project complete — all 3 phases executed
+**Core value:** Demonstrates production-ready clinical NLP with local LLM deployment, structured output validation, and explicit hallucination handling — all with German medical text.
+**Current focus:** Planning next milestone (v2.0)
 
 ## Current Position
 
