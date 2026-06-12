@@ -10,7 +10,7 @@
 
 - [x] **Phase 1: Foundation & Core Infrastructure** - Establish model deployment, API scaffold, and sample data (completed 2026-06-12)
 - [x] **Phase 2: Entity Extraction Pipeline** - Build complete extraction with all entity types and validation (completed 2026-06-12)
-- [ ] **Phase 3: Deployment & Documentation** - Package as portfolio-ready Docker demo
+- [x] **Phase 3: Deployment & Documentation** - Package as portfolio-ready Docker demo (completed 2026-06-12)
 
 ## Phase Details
 
@@ -82,7 +82,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 03-03-PLAN.md — Example extraction output: 3 pre-generated JSON files in data/examples/
+- [x] 03-03-PLAN.md — Example extraction output: 3 pre-generated JSON files in data/examples/ (completed 2026-06-12)
 
 ---
 
@@ -92,7 +92,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Foundation & Core Infrastructure | 1/1 | Complete    | 2026-06-12 |
 | 2. Entity Extraction Pipeline | 3/3 | Complete   | 2026-06-12 |
-| 3. Deployment & Documentation | 2/3 | In progress | - |
+| 3. Deployment & Documentation | 3/3 | Complete    | 2026-06-12 |
 
 ---
-*Last updated: 2026-06-12 (03-02 complete)*
+*Last updated: 2026-06-12 (03-03 complete — all phases done)*
