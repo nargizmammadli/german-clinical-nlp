@@ -117,9 +117,20 @@ async def extract_entities(request_body: ExtractionRequest, request: Request):
                     # Note: low_confidence from extractors is ignored — filtering done at endpoint level
 
         # --- Domain Validation (per VAL-02, D-07, D-08) ---
-        # Deserialize dicts back to Pydantic models for validation
-        temporal_entities = [TemporalEntity(**e) for e in combined_result["temporal_entities"]]
-        clinical_entities = [ClinicalEntity(**e) for e in combined_result["clinical_entities"]]
+        # Per D-05: deserialize per-entity so a single bad dict doesn't discard all results
+        temporal_entities = []
+        for e in combined_result["temporal_entities"]:
+            try:
+                temporal_entities.append(TemporalEntity(**e))
+            except (ValidationError, Exception) as err:
+                combined_result["errors"].append(f"Entity deserialization failed: {err}")
+
+        clinical_entities = []
+        for e in combined_result["clinical_entities"]:
+            try:
+                clinical_entities.append(ClinicalEntity(**e))
+            except (ValidationError, Exception) as err:
+                combined_result["errors"].append(f"Entity deserialization failed: {err}")
 
         # Validate temporal entities: reject impossible future dates per D-07
         validated_temporal = []
