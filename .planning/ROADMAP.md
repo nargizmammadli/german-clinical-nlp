@@ -46,9 +46,12 @@
   4. API returns meaningful error messages for invalid requests (empty text, unsupported formats, validation failures)
   5. Developer can add a new entity type by creating a single extractor plugin without modifying core pipeline code
 
-**Plans:** TBD
-**UI hint:** yes
+**Plans:** 3 plans
 
+Plans:
+- [ ] 02-01-PLAN.md — Temporal entity extraction with plugin pattern foundation
+- [ ] 02-02-PLAN.md — Clinical entity extraction with parallel execution
+- [ ] 02-03-PLAN.md — Validation logic and confidence filtering
 ---
 
 ### Phase 3: Deployment & Documentation
@@ -74,7 +77,7 @@
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Core Infrastructure | 1/1 | Complete    | 2026-06-12 |
-| 2. Entity Extraction Pipeline | 0/0 | Not started | - |
+| 2. Entity Extraction Pipeline | 0/3 | Planning complete | - |
 | 3. Deployment & Documentation | 0/0 | Not started | - |
 
 ---
