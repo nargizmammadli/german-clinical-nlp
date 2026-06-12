@@ -110,11 +110,9 @@ class ClinicalExtractor(BaseExtractor):
                         )
 
                         # Add to results
+                        # Per D-06: Confidence filtering is done at the endpoint level
+                        # using the configurable CONFIDENCE_THRESHOLD env variable.
                         result["clinical_entities"].append(entity.model_dump())
-
-                        # Per D-06: Flag low confidence entities (threshold 0.5)
-                        if entity.confidence < 0.5:
-                            result["low_confidence"].append(entity.model_dump())
 
                     except (ValidationError, KeyError, ValueError) as e:
                         # Per D-05, D-08: Capture error but continue processing

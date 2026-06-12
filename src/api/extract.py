@@ -15,11 +15,13 @@ from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, ValidationError
 
-from src.schemas.entities import EntityResponse
+from src.schemas.entities import EntityResponse, TemporalEntity, ClinicalEntity
 from src.extraction.base import extractor_registry
 # Import extractors to ensure they register themselves
 from src.extraction import temporal  # noqa: F401
 from src.extraction import clinical  # noqa: F401
+from src.validation.validators import validate_date_not_future, filter_low_confidence
+from src import config
 
 router = APIRouter()
 
@@ -112,10 +114,39 @@ async def extract_entities(request_body: ExtractionRequest, request: Request):
                     combined_result["temporal_entities"].extend(result.get("temporal_entities", []))
                     combined_result["clinical_entities"].extend(result.get("clinical_entities", []))
                     combined_result["errors"].extend(result.get("errors", []))
-                    combined_result["low_confidence"].extend(result.get("low_confidence", []))
+                    # Note: low_confidence from extractors is ignored — filtering done at endpoint level
 
-        # Return EntityResponse (Pydantic validates structure)
-        return EntityResponse(**combined_result)
+        # --- Domain Validation (per VAL-02, D-07, D-08) ---
+        # Deserialize dicts back to Pydantic models for validation
+        temporal_entities = [TemporalEntity(**e) for e in combined_result["temporal_entities"]]
+        clinical_entities = [ClinicalEntity(**e) for e in combined_result["clinical_entities"]]
+
+        # Validate temporal entities: reject impossible future dates per D-07
+        validated_temporal = []
+        for entity in temporal_entities:
+            is_valid, error_msg = validate_date_not_future(entity)
+            if is_valid:
+                validated_temporal.append(entity)
+            else:
+                # Per D-08: error message contains entity text and reason only (T-02-07)
+                combined_result["errors"].append(error_msg)
+
+        # --- Confidence Threshold Filtering (per D-06) ---
+        # Apply configurable threshold from environment variable
+        threshold = config.CONFIDENCE_THRESHOLD
+        high_conf_temporal, low_conf_temporal = filter_low_confidence(validated_temporal, threshold)
+        high_conf_clinical, low_conf_clinical = filter_low_confidence(clinical_entities, threshold)
+
+        # Combine all low-confidence entities into single array for response transparency
+        low_confidence_all = low_conf_temporal + low_conf_clinical
+
+        # Return EntityResponse with validated, filtered entities (Pydantic validates structure)
+        return EntityResponse(
+            temporal_entities=high_conf_temporal,
+            clinical_entities=high_conf_clinical,
+            errors=combined_result["errors"],
+            low_confidence=low_confidence_all
+        )
 
     except ValidationError as e:
         # Pydantic validation error - return as EntityResponse with errors per D-08
