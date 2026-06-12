@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.11.12-slim
 
 WORKDIR /app
 
@@ -11,11 +11,20 @@ COPY pyproject.toml ./
 RUN apt-get update && \
     apt-get install -y --no-install-recommends build-essential cmake && \
     rm -rf /var/lib/apt/lists/* && \
-    pip install --no-cache-dir .
+    pip install --no-cache-dir \
+        "llama-cpp-python==0.3.28" \
+        "fastapi==0.136.3" \
+        "pydantic==2.13.4" \
+        "uvicorn[standard]>=0.34.0" \
+        "python-dotenv>=1.0.0" \
+        "loguru>=0.7.0"
 
 # Copy application source (changes more frequently than deps)
 COPY src/ ./src/
 COPY healthcheck.py ./
+
+# Install the package itself now that source is present
+RUN pip install --no-cache-dir --no-deps .
 
 # Security: run as non-root user (ASVS V1.6 — T-03-01)
 RUN adduser --disabled-password --gecos "" appuser

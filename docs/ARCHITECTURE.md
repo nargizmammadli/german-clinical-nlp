@@ -415,6 +415,7 @@ Example test for new extractor:
 
 ```python
 def test_extract_symptom_entities():
+    from fastapi.testclient import TestClient
     from src.main import app
     from unittest.mock import MagicMock
 

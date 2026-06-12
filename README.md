@@ -63,14 +63,14 @@ curl -X POST http://localhost:8000/extract \
       "type": "Date",
       "text": "15.03.2024",
       "confidence": 0.97,
-      "source_span": {"start": 18, "end": 28, "text": "15.03.2024"},
+      "source_span": {"start": 17, "end": 27, "text": "15.03.2024"},
       "source_span_validated": true
     },
     {
       "type": "LOS",
       "text": "5 Tage",
       "confidence": 0.95,
-      "source_span": {"start": 71, "end": 77, "text": "5 Tage"},
+      "source_span": {"start": 83, "end": 89, "text": "5 Tage"},
       "source_span_validated": true
     }
   ],
@@ -79,14 +79,14 @@ curl -X POST http://localhost:8000/extract \
       "type": "Diagnosis",
       "text": "Diabetes mellitus Typ 2",
       "confidence": 0.96,
-      "source_span": {"start": 34, "end": 57, "text": "Diabetes mellitus Typ 2"},
+      "source_span": {"start": 32, "end": 55, "text": "Diabetes mellitus Typ 2"},
       "source_span_validated": true
     },
     {
       "type": "Medication",
       "text": "Metformin 1000mg",
       "confidence": 0.94,
-      "source_span": {"start": 85, "end": 101, "text": "Metformin 1000mg"},
+      "source_span": {"start": 91, "end": 107, "text": "Metformin 1000mg"},
       "source_span_validated": true
     }
   ],
@@ -210,21 +210,21 @@ Primärdiagnose: Bronchialkarzinom (C34.1). Chemotherapie mit Carboplatin begonn
       "type": "Date",
       "text": "03.01.2024",
       "confidence": 0.98,
-      "source_span": {"start": 22, "end": 32, "text": "03.01.2024"},
+      "source_span": {"start": 23, "end": 33, "text": "03.01.2024"},
       "source_span_validated": true
     },
     {
       "type": "Date",
       "text": "10.01.2024",
       "confidence": 0.97,
-      "source_span": {"start": 48, "end": 58, "text": "10.01.2024"},
+      "source_span": {"start": 49, "end": 59, "text": "10.01.2024"},
       "source_span_validated": true
     },
     {
       "type": "LOS",
       "text": "7 Tage",
       "confidence": 0.96,
-      "source_span": {"start": 78, "end": 84, "text": "7 Tage"},
+      "source_span": {"start": 79, "end": 85, "text": "7 Tage"},
       "source_span_validated": true
     }
   ],
@@ -233,7 +233,7 @@ Primärdiagnose: Bronchialkarzinom (C34.1). Chemotherapie mit Carboplatin begonn
       "type": "Diagnosis",
       "text": "Bronchialkarzinom (C34.1)",
       "confidence": 0.95,
-      "source_span": {"start": 102, "end": 126, "text": "Bronchialkarzinom (C34.1)"},
+      "source_span": {"start": 103, "end": 128, "text": "Bronchialkarzinom (C34.1)"},
       "source_span_validated": true
     },
     {
