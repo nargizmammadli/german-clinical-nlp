@@ -70,7 +70,13 @@ Plans:
   4. Architecture documentation explains component design, extensibility pattern, and how to add new entity types
   5. Portfolio reviewer can test all extraction endpoints and verify output quality against documented examples
 
-**Plans:** TBD
+**Plans:** 3 plans
+
+Plans:
+
+- [ ] 03-01-PLAN.md — Docker infrastructure: Dockerfile, docker-compose.yml, healthcheck.py, .dockerignore, .env.example, loguru runtime dep
+- [ ] 03-02-PLAN.md — Documentation: full README.md rewrite + docs/ARCHITECTURE.md component diagram supplement
+- [ ] 03-03-PLAN.md — Example extraction output: 3 pre-generated JSON files in data/examples/
 
 ---
 
@@ -80,7 +86,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Foundation & Core Infrastructure | 1/1 | Complete    | 2026-06-12 |
 | 2. Entity Extraction Pipeline | 3/3 | Complete   | 2026-06-12 |
-| 3. Deployment & Documentation | 0/0 | Not started | - |
+| 3. Deployment & Documentation | 0/3 | Not started | - |
 
 ---
 *Last updated: 2026-06-12*
