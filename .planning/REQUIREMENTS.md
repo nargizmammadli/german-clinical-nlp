@@ -18,18 +18,18 @@ Requirements for initial portfolio-ready release. Each maps to roadmap phases.
 
 ### Model & Inference
 
-- [ ] **MODEL-01**: System uses llama-cpp-python to load GGUF models
-- [ ] **MODEL-02**: Model selection is configurable via environment variables
-- [ ] **MODEL-03**: System works with local GGUF models (no cloud API dependencies)
-- [ ] **MODEL-04**: System handles context window appropriately (8K+ tokens or chunking)
+- [x] **MODEL-01**: System uses llama-cpp-python to load GGUF models
+- [x] **MODEL-02**: Model selection is configurable via environment variables
+- [x] **MODEL-03**: System works with local GGUF models (no cloud API dependencies)
+- [x] **MODEL-04**: System handles context window appropriately (8K+ tokens or chunking)
 
 ### API Endpoints
 
 - [ ] **API-01**: POST /extract endpoint accepts German clinical text and returns extracted entities
-- [ ] **API-02**: GET /health endpoint returns service health status
-- [ ] **API-03**: GET /models endpoint returns active model metadata
+- [x] **API-02**: GET /health endpoint returns service health status
+- [x] **API-03**: GET /models endpoint returns active model metadata
 - [ ] **API-04**: API provides meaningful error responses for invalid requests
-- [ ] **API-05**: API automatically generates OpenAPI documentation
+- [x] **API-05**: API automatically generates OpenAPI documentation
 
 ### Validation
 
@@ -39,9 +39,9 @@ Requirements for initial portfolio-ready release. Each maps to roadmap phases.
 
 ### Data & Samples
 
-- [ ] **DATA-01**: Project includes sample German clinical text from GGPONC or BRONCO datasets
-- [ ] **DATA-02**: Sample data demonstrates extraction across all entity types
-- [ ] **DATA-03**: Sample data is freely distributable (no patient data)
+- [x] **DATA-01**: Project includes sample German clinical text from GGPONC or BRONCO datasets
+- [x] **DATA-02**: Sample data demonstrates extraction across all entity types
+- [x] **DATA-03**: Sample data is freely distributable (no patient data)
 
 ### Deployment
 
@@ -115,21 +115,21 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ENTITY-04 | Phase 2 | Pending |
 | ENTITY-05 | Phase 2 | Pending |
 | ENTITY-06 | Phase 2 | Pending |
-| MODEL-01 | Phase 1 | Pending |
-| MODEL-02 | Phase 1 | Pending |
-| MODEL-03 | Phase 1 | Pending |
-| MODEL-04 | Phase 1 | Pending |
+| MODEL-01 | Phase 1 | Complete |
+| MODEL-02 | Phase 1 | Complete |
+| MODEL-03 | Phase 1 | Complete |
+| MODEL-04 | Phase 1 | Complete |
 | API-01 | Phase 2 | Pending |
-| API-02 | Phase 1 | Pending |
-| API-03 | Phase 1 | Pending |
+| API-02 | Phase 1 | Complete |
+| API-03 | Phase 1 | Complete |
 | API-04 | Phase 2 | Pending |
-| API-05 | Phase 1 | Pending |
+| API-05 | Phase 1 | Complete |
 | VAL-01 | Phase 2 | Pending |
 | VAL-02 | Phase 2 | Pending |
 | VAL-03 | Phase 2 | Pending |
-| DATA-01 | Phase 1 | Pending |
-| DATA-02 | Phase 1 | Pending |
-| DATA-03 | Phase 1 | Pending |
+| DATA-01 | Phase 1 | Complete |
+| DATA-02 | Phase 1 | Complete |
+| DATA-03 | Phase 1 | Complete |
 | DEPLOY-01 | Phase 3 | Pending |
 | DEPLOY-02 | Phase 3 | Pending |
 | DEPLOY-03 | Phase 3 | Pending |
@@ -142,6 +142,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EXT-02 | Phase 2 | Pending |
 
 **Coverage:**
+
 - v1 requirements: 29 total
 - Mapped to phases: 29/29 ✓
 - Unmapped: 0
