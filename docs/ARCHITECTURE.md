@@ -8,6 +8,51 @@ The German Clinical NLP pipeline uses a plugin-based architecture for entity ext
 2. **Extractor Registry** — Module-level registry for extractor discovery
 3. **@register_extractor Decorator** — Automatic registration pattern
 
+## Request Flow
+
+When a POST /extract request arrives, the pipeline runs all registered extractors in parallel using `asyncio.gather`, merges results, and returns a validated `EntityResponse`.
+
+```ascii
+POST /extract
+     |
+     v
+src/api/extract.py
+(ExtractRequest validated by Pydantic)
+     |
+     v
+asyncio.gather([                     <- parallel execution per D-17
+    asyncio.to_thread(TemporalExtractor.extract, text),
+    asyncio.to_thread(ClinicalExtractor.extract, text)
+], return_exceptions=True)           <- partial results per D-19
+     |
+     v
+Merge results (list.extend)          <- per D-18
+Domain validation (validate_date_not_future)
+Confidence filtering                 <- per D-20, CONFIDENCE_THRESHOLD env var
+     |
+     v
+EntityResponse (Pydantic validation)
+{
+  "temporal_entities": [...],        <- Dates and LOS indicators
+  "clinical_entities": [...],        <- Diagnoses and medications
+  "errors": [...],                   <- Validation and extraction errors
+  "low_confidence": [...]            <- Entities below threshold
+}
+     |
+     v
+JSON response to client
+```
+
+### Parallel Extraction
+
+The extraction pipeline uses three asyncio patterns to achieve safe parallel execution with synchronous llama-cpp-python calls:
+
+- **`asyncio.to_thread`** wraps each synchronous `Llama.create_chat_completion()` call (per D-17) so it runs in a thread pool, preventing it from blocking the FastAPI event loop. Without this, the second extractor would wait for the first to complete.
+- **`return_exceptions=True`** in `asyncio.gather` ensures that if one extractor raises an exception, the other extractor's results are still returned — the error is captured in the `errors` array and processing continues (per D-19).
+- **`list.extend()`** merges entity arrays from all extractor results into a single combined result (per D-18). Each extractor returns the full four-key dictionary; `temporal_entities` from all extractors are merged, as are `clinical_entities` and `errors`.
+
+See `src/api/extract.py` for the full implementation.
+
 ## Plugin Pattern
 
 ### BaseExtractor Abstract Class
