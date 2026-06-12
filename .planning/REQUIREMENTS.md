@@ -10,8 +10,8 @@ Requirements for initial portfolio-ready release. Each maps to roadmap phases.
 ### Entity Extraction
 
 - [x] **ENTITY-01**: System extracts dates from German clinical text with confidence scores
-- [ ] **ENTITY-02**: System extracts diagnoses from German clinical text with confidence scores
-- [ ] **ENTITY-03**: System extracts medications from German clinical text with confidence scores
+- [x] **ENTITY-02**: System extracts diagnoses from German clinical text with confidence scores
+- [x] **ENTITY-03**: System extracts medications from German clinical text with confidence scores
 - [x] **ENTITY-04**: System extracts length-of-stay indicators from German clinical text with confidence scores
 - [x] **ENTITY-05**: Each extracted entity includes source text span (evidence grounding)
 - [x] **ENTITY-06**: Extraction output is validated JSON conforming to Pydantic schemas
@@ -60,7 +60,7 @@ Requirements for initial portfolio-ready release. Each maps to roadmap phases.
 ### Extensibility
 
 - [x] **EXT-01**: Entity extraction follows plugin pattern (easy to add new entity types)
-- [ ] **EXT-02**: Documentation demonstrates how to add a new entity type
+- [x] **EXT-02**: Documentation demonstrates how to add a new entity type
 
 ## v2 Requirements
 
@@ -110,8 +110,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | ENTITY-01 | Phase 2 | Complete |
-| ENTITY-02 | Phase 2 | Pending |
-| ENTITY-03 | Phase 2 | Pending |
+| ENTITY-02 | Phase 2 | Complete |
+| ENTITY-03 | Phase 2 | Complete |
 | ENTITY-04 | Phase 2 | Complete |
 | ENTITY-05 | Phase 2 | Complete |
 | ENTITY-06 | Phase 2 | Complete |
@@ -139,7 +139,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DOC-03 | Phase 3 | Pending |
 | DOC-04 | Phase 3 | Pending |
 | EXT-01 | Phase 2 | Complete |
-| EXT-02 | Phase 2 | Pending |
+| EXT-02 | Phase 2 | Complete |
 
 **Coverage:**
 

@@ -50,7 +50,7 @@
 
 Plans:
 - [x] 02-01-PLAN.md — Temporal entity extraction with plugin pattern foundation (completed 2026-06-12)
-- [ ] 02-02-PLAN.md — Clinical entity extraction with parallel execution
+- [x] 02-02-PLAN.md — Clinical entity extraction with parallel execution (completed 2026-06-12)
 - [ ] 02-03-PLAN.md — Validation logic and confidence filtering
 ---
 
@@ -77,7 +77,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Core Infrastructure | 1/1 | Complete    | 2026-06-12 |
-| 2. Entity Extraction Pipeline | 1/3 | Executing | - |
+| 2. Entity Extraction Pipeline | 2/3 | Executing | - |
 | 3. Deployment & Documentation | 0/0 | Not started | - |
 
 ---
