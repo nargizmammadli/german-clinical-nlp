@@ -17,6 +17,7 @@ from src.schemas.entities import EntityResponse
 from src.extraction.base import extractor_registry
 # Import extractors to ensure they register themselves
 from src.extraction import temporal  # noqa: F401
+from src.extraction import clinical  # noqa: F401
 
 router = APIRouter()
 
@@ -61,23 +62,44 @@ async def extract_entities(request_body: ExtractionRequest, request: Request):
         )
 
     try:
+        # Initialize result structure
+        combined_result = {
+            "temporal_entities": [],
+            "clinical_entities": [],
+            "errors": [],
+            "low_confidence": []
+        }
+
         # Get temporal extractor from registry per D-09, D-11
-        extractor_cls = extractor_registry.get("temporal")
-        if extractor_cls is None:
-            return EntityResponse(
-                temporal_entities=[],
-                clinical_entities=[],
-                errors=["Temporal extractor not registered"]
-            )
+        temporal_extractor_cls = extractor_registry.get("temporal")
+        if temporal_extractor_cls is not None:
+            # Initialize extractor with model per D-11 dependency injection
+            temporal_extractor = temporal_extractor_cls(request.app.state.model)
+            # Call extraction per D-05, D-08
+            temporal_result = temporal_extractor.extract(request_body.text)
+            # Merge temporal results
+            combined_result["temporal_entities"].extend(temporal_result.get("temporal_entities", []))
+            combined_result["errors"].extend(temporal_result.get("errors", []))
+            combined_result["low_confidence"].extend(temporal_result.get("low_confidence", []))
+        else:
+            combined_result["errors"].append("Temporal extractor not registered")
 
-        # Initialize extractor with model per D-11 dependency injection
-        extractor = extractor_cls(request.app.state.model)
-
-        # Call extraction per D-05, D-08
-        result = extractor.extract(request_body.text)
+        # Get clinical extractor from registry per D-09, D-11
+        clinical_extractor_cls = extractor_registry.get("clinical")
+        if clinical_extractor_cls is not None:
+            # Initialize extractor with model per D-11 dependency injection
+            clinical_extractor = clinical_extractor_cls(request.app.state.model)
+            # Call extraction per D-05, D-08
+            clinical_result = clinical_extractor.extract(request_body.text)
+            # Merge clinical results
+            combined_result["clinical_entities"].extend(clinical_result.get("clinical_entities", []))
+            combined_result["errors"].extend(clinical_result.get("errors", []))
+            combined_result["low_confidence"].extend(clinical_result.get("low_confidence", []))
+        else:
+            combined_result["errors"].append("Clinical extractor not registered")
 
         # Return EntityResponse (Pydantic validates structure)
-        return EntityResponse(**result)
+        return EntityResponse(**combined_result)
 
     except ValidationError as e:
         # Pydantic validation error - return as EntityResponse with errors per D-08
