@@ -19,6 +19,7 @@ dependencies = [
     "pydantic==2.13.4",
     "uvicorn[standard]>=0.34.0",
     "python-dotenv>=1.0.0",
+    "loguru>=0.7.0",
 ]
 
 [project.optional-dependencies]

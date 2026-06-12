@@ -1,0 +1,35 @@
+# Never bundle model files into image — GGUF files are 4.5-40GB
+# Model is volume-mounted at runtime via docker-compose (T-03-02)
+models/
+
+# Never expose secrets — injected at runtime via env_file in docker-compose (T-03-02)
+.env
+.env.*
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Development and test artifacts
+.pytest_cache/
+tests/
+.coverage
+htmlcov/
+
+# Build artifacts
+*.egg-info/
+
+# Version control
+.git/
+.gitignore
+
+# Sample and example data (not needed at container runtime)
+data/
+
+# Planning artifacts
+.planning/
+
+# Editor config
+.vscode/
+.idea/
