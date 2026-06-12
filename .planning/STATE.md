@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-last_updated: "2026-06-12T17:00:00.000Z"
+last_updated: "2026-06-12T16:15:45.799Z"
 progress:
   total_phases: 3
   completed_phases: 2
   total_plans: 7
-  completed_plans: 5
-  percent: 71
+  completed_plans: 6
+  percent: 86
 ---
 
 # Project State: German Clinical NLP Pipeline
@@ -26,11 +26,11 @@ progress:
 ## Current Position
 
 Phase: 03 (deployment-documentation) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 **Phase:** 3
-**Plan:** 2
-**Status:** Executing Phase 03 Plan 02  
-**Progress:** `[███████████████████░] 71%` (2/3 phases complete, 1/3 plans of phase 3 complete)
+**Plan:** 3
+**Status:** Executing Phase 03 Plan 03  
+**Progress:** `[██████████████████████░] 86%` (2/3 phases complete, 2/3 plans of phase 3 complete)
 
 **Phase Goal:** Working local LLM deployment with health monitoring and German clinical sample data
 
@@ -54,10 +54,19 @@ Plan: 2 of 3
 | Duration (02-02) | 418s | 7 minutes |
 | Duration (02-03) | 336s | 6 minutes |
 | Duration (03-01) | ~720s | 12 minutes |
+| Duration (03-02) | ~98s | 2 minutes |
 
 ## Accumulated Context
 
 ### Decisions Made
+
+**2026-06-12 - Phase 03 Plan 02 (Documentation)**
+
+- D-05: Quick Start section first — recruiter can run demo without reading anything else
+- D-06: curl + Python httpx examples with full JSON response in API Reference
+- D-07: Explanatory tone in Why This Project (local LLM, German clinical text, plugin pattern)
+- D-08: Architecture docs in separate docs/ARCHITECTURE.md linked from README
+- D-09 section 1: Component diagram added to ARCHITECTURE.md showing POST /extract → asyncio.gather → EntityResponse flow
 
 **2026-06-12 - Phase 03 Plan 01 (Docker Infrastructure)**
 
@@ -101,6 +110,7 @@ None yet.
 - [x] Execute Phase 02 Plan 02 (clinical entity extraction + parallel execution) - completed 2026-06-12
 - [x] Execute Phase 02 Plan 03 (validation and confidence filtering) - completed 2026-06-12
 - [x] Execute Phase 03 Plan 01 (Docker infrastructure) - completed 2026-06-12
+- [x] Execute Phase 03 Plan 02 (Documentation: README + ARCHITECTURE diagram) - completed 2026-06-12
 
 ### Blockers
 
@@ -119,6 +129,10 @@ Research completed 2026-06-11:
 ## Session Continuity
 
 **For next session:**
+
+- Phase 03 Plan 02 complete: Portfolio documentation created
+- Modified: README.md (full 8-section portfolio document), docs/ARCHITECTURE.md (Request Flow + component diagram section added)
+- Summary: `.planning/phases/03-deployment-documentation/03-02-SUMMARY.md`
 
 - Phase 03 Plan 01 complete: Docker infrastructure created
 - Added: Dockerfile, docker-compose.yml, healthcheck.py, .dockerignore, .env.example, loguru dep in pyproject.toml

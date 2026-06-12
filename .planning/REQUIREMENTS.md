@@ -52,10 +52,10 @@ Requirements for initial portfolio-ready release. Each maps to roadmap phases.
 
 ### Documentation
 
-- [ ] **DOC-01**: README includes setup instructions
-- [ ] **DOC-02**: README includes API usage examples with curl/Python
+- [x] **DOC-01**: README includes setup instructions
+- [x] **DOC-02**: README includes API usage examples with curl/Python
 - [ ] **DOC-03**: README includes example extraction output (JSON samples)
-- [ ] **DOC-04**: Architecture documentation explains component design and extensibility
+- [x] **DOC-04**: Architecture documentation explains component design and extensibility
 
 ### Extensibility
 
@@ -134,10 +134,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DEPLOY-02 | Phase 3 | Pending |
 | DEPLOY-03 | Phase 3 | Pending |
 | DEPLOY-04 | Phase 3 | Pending |
-| DOC-01 | Phase 3 | Pending |
-| DOC-02 | Phase 3 | Pending |
+| DOC-01 | Phase 3 | Complete |
+| DOC-02 | Phase 3 | Complete |
 | DOC-03 | Phase 3 | Pending |
-| DOC-04 | Phase 3 | Pending |
+| DOC-04 | Phase 3 | Complete |
 | EXT-01 | Phase 2 | Complete |
 | EXT-02 | Phase 2 | Complete |
 

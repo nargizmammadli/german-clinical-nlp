@@ -78,7 +78,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 03-02-PLAN.md — Documentation: full README.md rewrite + docs/ARCHITECTURE.md component diagram supplement
+- [x] 03-02-PLAN.md — Documentation: full README.md rewrite + docs/ARCHITECTURE.md component diagram supplement (completed 2026-06-12)
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -92,7 +92,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Foundation & Core Infrastructure | 1/1 | Complete    | 2026-06-12 |
 | 2. Entity Extraction Pipeline | 3/3 | Complete   | 2026-06-12 |
-| 3. Deployment & Documentation | 1/3 | In progress | - |
+| 3. Deployment & Documentation | 2/3 | In progress | - |
 
 ---
-*Last updated: 2026-06-12 (03-01 complete)*
+*Last updated: 2026-06-12 (03-02 complete)*
