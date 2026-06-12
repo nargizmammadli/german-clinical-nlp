@@ -317,3 +317,88 @@ def test_extract_all_entity_types():
         assert "confidence" in entity
         assert "source_span" in entity
         assert 0.0 <= entity["confidence"] <= 1.0
+
+
+def test_extract_rejects_future_dates():
+    """
+    Test that future date entities are moved to errors array per D-07, D-08, VAL-02.
+
+    Extraction endpoint should validate temporal entities and reject dates
+    that are in the future (impossible for clinical records).
+    """
+    from src.main import app
+
+    mock_model = MagicMock()
+    # Mock LLM returning a future date entity
+    mock_model.create_chat_completion.return_value = {
+        "choices": [{
+            "message": {
+                "content": '{"temporal_entities": [{"type": "Date", "text": "15.03.2027", "confidence": 0.92, "source_span": {"start": 10, "end": 20, "text": "15.03.2027"}, "source_span_validated": true}]}'
+            }
+        }]
+    }
+    app.state.model = mock_model
+
+    client = TestClient(app)
+    response = client.post(
+        "/extract",
+        json={"text": "Termin am 15.03.2027 für Nachuntersuchung geplant."}
+    )
+
+    assert response.status_code == 200
+    data = response.json()
+
+    # Future date should be in errors array, not temporal_entities
+    assert "errors" in data
+    assert len(data["errors"]) > 0
+    error_found = any("Date is in the future" in err and "15.03.2027" in err for err in data["errors"])
+    assert error_found, f"Expected 'Date is in the future: 15.03.2027' in errors, got: {data['errors']}"
+
+    # The future date should not appear in temporal_entities
+    temporal_texts = [e["text"] for e in data.get("temporal_entities", [])]
+    assert "15.03.2027" not in temporal_texts, "Future date should not be in temporal_entities"
+
+
+def test_extract_filters_low_confidence():
+    """
+    Test that low-confidence entities are moved to low_confidence array per D-06.
+
+    Entities below CONFIDENCE_THRESHOLD go to low_confidence, not temporal_entities.
+    """
+    from src.main import app
+    from unittest.mock import patch
+
+    mock_model = MagicMock()
+    # Mock LLM returning two entities: one high confidence (0.7), one low (0.3)
+    mock_model.create_chat_completion.return_value = {
+        "choices": [{
+            "message": {
+                "content": '{"temporal_entities": [{"type": "Date", "text": "15.03.2023", "confidence": 0.7, "source_span": {"start": 11, "end": 21, "text": "15.03.2023"}, "source_span_validated": true}, {"type": "Date", "text": "10.01.2023", "confidence": 0.3, "source_span": {"start": 0, "end": 10, "text": "10.01.2023"}, "source_span_validated": true}]}'
+            }
+        }]
+    }
+    app.state.model = mock_model
+
+    # Patch CONFIDENCE_THRESHOLD to 0.5 to ensure predictable test behavior
+    with patch("src.config.CONFIDENCE_THRESHOLD", 0.5):
+        client = TestClient(app)
+        response = client.post(
+            "/extract",
+            json={"text": "10.01.2023 Aufnahme am 15.03.2023. Patient stabil."}
+        )
+
+    assert response.status_code == 200
+    data = response.json()
+
+    # High-confidence entity (0.7 >= 0.5) should be in temporal_entities
+    assert "temporal_entities" in data
+    high_conf_texts = [e["text"] for e in data["temporal_entities"]]
+    assert "15.03.2023" in high_conf_texts, f"High confidence entity should be in temporal_entities, got: {high_conf_texts}"
+
+    # Low-confidence entity (0.3 < 0.5) should NOT be in temporal_entities (moved to low_confidence)
+    assert "10.01.2023" not in high_conf_texts, "Low confidence entity must not appear in temporal_entities"
+
+    # Low-confidence entity (0.3 < 0.5) should be in low_confidence array
+    assert "low_confidence" in data
+    low_conf_texts = [e["text"] for e in data["low_confidence"]]
+    assert "10.01.2023" in low_conf_texts, f"Low confidence entity should be in low_confidence, got: {low_conf_texts}"
