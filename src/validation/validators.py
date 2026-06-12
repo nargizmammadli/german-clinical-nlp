@@ -10,7 +10,7 @@ Per T-02-07 (threat mitigation): error messages expose only entity text and
 validation failure reason — no internal state, model details, or stack traces.
 """
 
-from datetime import datetime
+from datetime import datetime, date
 
 from src.schemas.entities import TemporalEntity
 
@@ -47,16 +47,20 @@ def validate_date_not_future(entity: TemporalEntity) -> tuple[bool, str | None]:
     if entity.type != "Date":
         return (True, None)
 
-    # Parse German date format DD.MM.YYYY (standard GGPONC corpus format)
-    try:
-        parsed_date = datetime.strptime(entity.text, "%d.%m.%Y")
-    except ValueError:
+    # Parse German date formats DD.MM.YYYY and DD.MM.YY (both advertised by the prompt)
+    parsed_date = None
+    for fmt in ("%d.%m.%Y", "%d.%m.%y"):
+        try:
+            parsed_date = datetime.strptime(entity.text, fmt).date()
+            break
+        except ValueError:
+            continue
+    if parsed_date is None:
         # Per D-08: include entity text in error message for actionable context
         return (False, f"Invalid date format: {entity.text}")
 
-    # Compare to today (strip time component for date-only comparison)
-    today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-    if parsed_date > today:
+    # Use date.today() for timezone-safe comparison (no clock/TZ dependency)
+    if parsed_date > date.today():
         return (False, f"Date is in the future: {entity.text}")
 
     return (True, None)
