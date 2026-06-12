@@ -21,7 +21,7 @@ Production-ready information extraction pipeline for German clinical text — de
 ### Step 1: Clone and prepare
 
 ```bash
-git clone https://github.com/your-username/german-clinical-nlp.git
+git clone https://github.com/nargizmammadli/german-clinical-nlp.git
 cd german-clinical-nlp
 cp .env.example .env
 ```
@@ -31,10 +31,8 @@ cp .env.example .env
 ```bash
 mkdir -p models
 wget -O models/mistral-7b-instruct.gguf \
-  https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q4_K_M.gguf
+  https://huggingface.co/mistral-community/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/Mistral-7B-Instruct-v0.2.Q4_K_M.gguf
 ```
-
-> **Alternative source:** [mistral-community/Mistral-7B-Instruct-v0.2-GGUF](https://huggingface.co/mistral-community/Mistral-7B-Instruct-v0.2-GGUF) on HuggingFace.
 
 ### Step 3: Start the API
 
