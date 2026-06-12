@@ -6,9 +6,11 @@ with confidence scores and validated source spans.
 
 Per D-05: Returns partial results even if some extractions fail.
 Per D-08: Detailed errors in errors array.
+Per D-12: Parallel async execution via asyncio.gather.
 Per API-04: Validates non-empty input text.
 """
 
+import asyncio
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, ValidationError
@@ -70,33 +72,47 @@ async def extract_entities(request_body: ExtractionRequest, request: Request):
             "low_confidence": []
         }
 
-        # Get temporal extractor from registry per D-09, D-11
+        # Get extractors from registry per D-09, D-11
         temporal_extractor_cls = extractor_registry.get("temporal")
+        clinical_extractor_cls = extractor_registry.get("clinical")
+
+        # Initialize extractors with model per D-11 dependency injection
+        extractors = []
         if temporal_extractor_cls is not None:
-            # Initialize extractor with model per D-11 dependency injection
             temporal_extractor = temporal_extractor_cls(request.app.state.model)
-            # Call extraction per D-05, D-08
-            temporal_result = temporal_extractor.extract(request_body.text)
-            # Merge temporal results
-            combined_result["temporal_entities"].extend(temporal_result.get("temporal_entities", []))
-            combined_result["errors"].extend(temporal_result.get("errors", []))
-            combined_result["low_confidence"].extend(temporal_result.get("low_confidence", []))
+            extractors.append(("temporal", temporal_extractor))
         else:
             combined_result["errors"].append("Temporal extractor not registered")
 
-        # Get clinical extractor from registry per D-09, D-11
-        clinical_extractor_cls = extractor_registry.get("clinical")
         if clinical_extractor_cls is not None:
-            # Initialize extractor with model per D-11 dependency injection
             clinical_extractor = clinical_extractor_cls(request.app.state.model)
-            # Call extraction per D-05, D-08
-            clinical_result = clinical_extractor.extract(request_body.text)
-            # Merge clinical results
-            combined_result["clinical_entities"].extend(clinical_result.get("clinical_entities", []))
-            combined_result["errors"].extend(clinical_result.get("errors", []))
-            combined_result["low_confidence"].extend(clinical_result.get("low_confidence", []))
+            extractors.append(("clinical", clinical_extractor))
         else:
             combined_result["errors"].append("Clinical extractor not registered")
+
+        # Run extractors in parallel per D-12 using asyncio.gather
+        # Use asyncio.to_thread since llama-cpp-python is synchronous
+        if extractors:
+            tasks = [
+                asyncio.to_thread(extractor.extract, request_body.text)
+                for name, extractor in extractors
+            ]
+
+            # Per D-12: Run both extractors concurrently
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+
+            # Merge results per D-05: preserve partial results even if one extractor fails
+            for i, result in enumerate(results):
+                if isinstance(result, Exception):
+                    # Per D-05, D-08: Capture error but continue processing
+                    extractor_name = extractors[i][0]
+                    combined_result["errors"].append(f"{extractor_name} extraction failed: {str(result)}")
+                elif isinstance(result, dict):
+                    # Merge successful results
+                    combined_result["temporal_entities"].extend(result.get("temporal_entities", []))
+                    combined_result["clinical_entities"].extend(result.get("clinical_entities", []))
+                    combined_result["errors"].extend(result.get("errors", []))
+                    combined_result["low_confidence"].extend(result.get("low_confidence", []))
 
         # Return EntityResponse (Pydantic validates structure)
         return EntityResponse(**combined_result)
