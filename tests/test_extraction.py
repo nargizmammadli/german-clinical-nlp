@@ -257,25 +257,31 @@ def test_extract_all_entity_types():
     # Mock app state with loaded model
     mock_model = MagicMock()
 
-    # Mock model to return different responses based on which extractor calls it
-    # First call (temporal): returns date and LOS
-    # Second call (clinical): returns diagnosis and medication
-    mock_model.create_chat_completion.side_effect = [
-        {
-            "choices": [{
-                "message": {
-                    "content": '{"temporal_entities": [{"type": "Date", "text": "15.03.2025", "confidence": 0.95, "source_span": {"start": 11, "end": 21, "text": "15.03.2025"}}, {"type": "LOS", "text": "4 Tage", "confidence": 0.90, "source_span": {"start": 184, "end": 190, "text": "4 Tage"}}]}'
-                }
-            }]
-        },
-        {
-            "choices": [{
-                "message": {
-                    "content": '{"clinical_entities": [{"type": "Diagnosis", "text": "Lumbalgie (M54.5)", "confidence": 0.92, "source_span": {"start": 92, "end": 109, "text": "Lumbalgie (M54.5)"}}, {"type": "Medication", "text": "Ibuprofen 600mg", "confidence": 0.95, "source_span": {"start": 121, "end": 136, "text": "Ibuprofen 600mg"}}]}'
-                }
-            }]
-        }
-    ]
+    # Dispatch by inspecting the system prompt to avoid a race condition: with
+    # asyncio.to_thread both extractors call the mock concurrently, so a
+    # positional side_effect list is non-deterministic under thread scheduling.
+    temporal_response = {
+        "choices": [{
+            "message": {
+                "content": '{"temporal_entities": [{"type": "Date", "text": "15.03.2025", "confidence": 0.95, "source_span": {"start": 12, "end": 22, "text": "15.03.2025"}}, {"type": "LOS", "text": "4 Tage", "confidence": 0.90, "source_span": {"start": 162, "end": 168, "text": "4 Tage"}}]}'
+            }
+        }]
+    }
+    clinical_response = {
+        "choices": [{
+            "message": {
+                "content": '{"clinical_entities": [{"type": "Diagnosis", "text": "Lumbalgie (M54.5)", "confidence": 0.92, "source_span": {"start": 92, "end": 109, "text": "Lumbalgie (M54.5)"}}, {"type": "Medication", "text": "Ibuprofen 600mg", "confidence": 0.95, "source_span": {"start": 121, "end": 136, "text": "Ibuprofen 600mg"}}]}'
+            }
+        }]
+    }
+
+    def dispatch_by_prompt(messages=None, **kwargs):
+        content = str(messages)
+        if "temporal_entities" in content:
+            return temporal_response
+        return clinical_response
+
+    mock_model.create_chat_completion.side_effect = dispatch_by_prompt
     app.state.model = mock_model
 
     client = TestClient(app)
